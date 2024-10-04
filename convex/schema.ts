@@ -9,4 +9,11 @@ export default defineSchema({
     email: v.string(),
     imageUrl: v.optional(v.string()),
   }).index("by_clerkUserId", ["clerkUserId"]),
+
+  jobs: defineTable({
+    date: v.string(),
+    description: v.string(),
+    price: v.number(),
+    userId: v.string(),
+  }).index("by_userId", ["userId"]),
 });

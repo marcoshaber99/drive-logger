@@ -4,8 +4,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
 
 import Providers from "@/components/providers";
-import Header from "@/components/header";
-import Footer from "@/components/footer";
 
 import "./globals.css";
 
@@ -21,8 +19,8 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Next Shadcn Template",
-  description: "NextJs template with shadcn/ui",
+  title: "Dashboard",
+  description: "A simple dashboard with Next.js and Shadcn UI",
 };
 
 export default function RootLayout({
@@ -35,16 +33,12 @@ export default function RootLayout({
       <html lang="en" className="scroll-smooth" suppressHydrationWarning>
         <body
           className={cn(
-            "flex min-h-screen flex-col",
+            "min-h-screen bg-background font-sans antialiased",
             geistSans.variable,
             geistMono.variable
           )}
         >
-          <Providers>
-            <Header />
-            <main className="grow">{children}</main>
-            <Footer />
-          </Providers>
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>
