@@ -39,6 +39,17 @@ export function JobTable({ jobs }: JobTableProps) {
   const [editingJob, setEditingJob] = useState<Job | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  if (jobs.length === 0) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-lg text-gray-500">No jobs found.</p>
+        <p className="text-sm text-gray-400 mt-2">
+          Create a new job to get started.
+        </p>
+      </div>
+    );
+  }
+
   const groupedJobs = jobs.reduce(
     (acc, job) => {
       const month = new Date(job.date).toLocaleString("default", {
@@ -79,86 +90,92 @@ export function JobTable({ jobs }: JobTableProps) {
   };
 
   return (
-    <>
+    <div className="overflow-x-auto animate-fade-in">
       {Object.entries(groupedJobs).map(([month, monthJobs]) => (
         <div key={month} className="mb-8">
           <h2 className="text-xl font-semibold mb-2">{month}</h2>
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Date</TableHead>
-                <TableHead>Description</TableHead>
-                <TableHead>Price</TableHead>
-                <TableHead>Actions</TableHead>
+                <TableHead className="w-1/5">Date</TableHead>
+                <TableHead className="w-2/5">Description</TableHead>
+                <TableHead className="w-1/5">Price</TableHead>
+                <TableHead className="w-1/5">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
               {monthJobs?.map((job) => (
                 <TableRow key={job._id}>
-                  <TableCell>
+                  <TableCell className="whitespace-nowrap">
                     {new Date(job.date).toLocaleDateString()}
                   </TableCell>
-                  <TableCell>{job.description}</TableCell>
+                  <TableCell className="max-w-xs truncate">
+                    {job.description}
+                  </TableCell>
                   <TableCell>${job.price.toFixed(2)}</TableCell>
                   <TableCell>
-                    <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-                      <DialogTrigger asChild>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={() => handleEdit(job)}
-                        >
-                          Edit
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle>Edit Job</DialogTitle>
-                        </DialogHeader>
-                        {editingJob && (
-                          <div className="space-y-4">
-                            <Input
-                              type="date"
-                              value={editingJob.date}
-                              onChange={(e) =>
-                                setEditingJob({
-                                  ...editingJob,
-                                  date: e.target.value,
-                                })
-                              }
-                            />
-                            <Textarea
-                              value={editingJob.description}
-                              onChange={(e) =>
-                                setEditingJob({
-                                  ...editingJob,
-                                  description: e.target.value,
-                                })
-                              }
-                            />
-                            <Input
-                              type="number"
-                              value={editingJob.price}
-                              onChange={(e) =>
-                                setEditingJob({
-                                  ...editingJob,
-                                  price: parseFloat(e.target.value),
-                                })
-                              }
-                            />
-                            <Button onClick={handleUpdate}>Update</Button>
-                          </div>
-                        )}
-                      </DialogContent>
-                    </Dialog>
-                    <Button
-                      variant="destructive"
-                      size="sm"
-                      onClick={() => handleDelete(job._id)}
-                      className="ml-2"
-                    >
-                      Delete
-                    </Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Dialog
+                        open={isDialogOpen}
+                        onOpenChange={setIsDialogOpen}
+                      >
+                        <DialogTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(job)}
+                          >
+                            Edit
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[425px]">
+                          <DialogHeader>
+                            <DialogTitle>Edit Job</DialogTitle>
+                          </DialogHeader>
+                          {editingJob && (
+                            <div className="space-y-4">
+                              <Input
+                                type="date"
+                                value={editingJob.date}
+                                onChange={(e) =>
+                                  setEditingJob({
+                                    ...editingJob,
+                                    date: e.target.value,
+                                  })
+                                }
+                              />
+                              <Textarea
+                                value={editingJob.description}
+                                onChange={(e) =>
+                                  setEditingJob({
+                                    ...editingJob,
+                                    description: e.target.value,
+                                  })
+                                }
+                              />
+                              <Input
+                                type="number"
+                                value={editingJob.price}
+                                onChange={(e) =>
+                                  setEditingJob({
+                                    ...editingJob,
+                                    price: parseFloat(e.target.value),
+                                  })
+                                }
+                              />
+                              <Button onClick={handleUpdate}>Update</Button>
+                            </div>
+                          )}
+                        </DialogContent>
+                      </Dialog>
+                      <Button
+                        variant="destructive"
+                        size="sm"
+                        onClick={() => handleDelete(job._id)}
+                      >
+                        Delete
+                      </Button>
+                    </div>
                   </TableCell>
                 </TableRow>
               ))}
@@ -178,6 +195,6 @@ export function JobTable({ jobs }: JobTableProps) {
           </Table>
         </div>
       ))}
-    </>
+    </div>
   );
 }
