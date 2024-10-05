@@ -13,6 +13,15 @@ export const create = mutation({
     if (!identity) {
       throw new Error("Not authenticated");
     }
+
+    // Server-side validation
+    if (!args.date) {
+      throw new Error("Date is required");
+    }
+    if (isNaN(args.price) || args.price <= 0) {
+      throw new Error("Please enter a valid price");
+    }
+
     const userId = identity.subject;
     return await ctx.db.insert("jobs", { ...args, userId });
   },

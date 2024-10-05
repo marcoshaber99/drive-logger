@@ -8,9 +8,6 @@ export default function DashboardPage() {
     <div className="space-y-6">
       <h1 className="text-2xl font-bold">Dashboard</h1>
       <Card>
-        <CardHeader>
-          <CardTitle>Job List</CardTitle>
-        </CardHeader>
         <CardContent className="p-0 sm:p-6">
           <Suspense fallback={<JobTableSkeleton />}>
             <JobTableWithData />
